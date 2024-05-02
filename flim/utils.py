@@ -38,14 +38,14 @@ def label_connected_components(label_images, start_label=1, is_3d=False):
     if is_3d and label_images.ndim == 3:
         label_images = np.expand_dims(label_images, 0)
 
-    new_label_images = np.zeros_like(label_images).astype(np.int)
+    new_label_images = np.zeros_like(label_images).astype(np.int32)
 
     _c = start_label
 
     for label_image, new_label_image in zip(label_images, new_label_images):
         num_labels = label_image.astype(np.int32).max()
 
-        # new_label_image = np.zeros_like(label_image).astype(np.int)
+        # new_label_image = np.zeros_like(label_image).astype(np.int32)
         if is_3d:
             structure = np.ones((3, 3, 3), dtype=np.uint8)
         else:

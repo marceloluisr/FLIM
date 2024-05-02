@@ -52,7 +52,7 @@ def load_label_image(label_path):
 
         # images dimensions are flipped
         image_shape = (label_infos[2], label_infos[1])
-        label_image = np.zeros(image_shape, dtype=np.int)
+        label_image = np.zeros(image_shape, dtype=np.int32)
 
         for line in lines[1:]:
             split_line = line.split(" ")
@@ -75,7 +75,7 @@ def load_image(image_dir):
 
 
 def _save_markers(markers, markers_dir):
-    markers = markers.astype(np.int)
+    markers = markers.astype(np.int32)
     mask = markers != 0
 
     number_of_markers = mask.sum()
@@ -156,7 +156,7 @@ def get_markers_from_superpixels(image):
     image_markers = np.zeros((image.shape[0:2]))
     image_markers[centers[:, 0], centers[:, 1]] = 1
 
-    return image_markers.astype(np.int)
+    return image_markers.astype(np.int32)
 
 
 @jit
@@ -185,7 +185,7 @@ def turn_superpixels_borders_in_markers(superpixels, markers):
 
     markers_mask = markers != 0
     boundaries = find_boundaries(superpixels, connectivity=2, mode="inner").astype(
-        np.int
+        np.int32
     )
     for label in labels:
         superpixel_mask = np.logical_and(superpixels == label, boundaries)
@@ -214,7 +214,7 @@ def create_viewer(
 ):
 
     image = load_image(image_dir)
-    initial = np.zeros(image.shape[:2], dtype=np.int)
+    initial = np.zeros(image.shape[:2], dtype=np.int32)
 
     if n_superpixels > 0:
         super_pixels, _ = get_superpixels_of_image(image, n_superpixels)
@@ -244,7 +244,7 @@ def create_viewer(
 
     if super_pixels is not None:
         boundaries = find_boundaries(super_pixels, connectivity=2, mode="inner").astype(
-            np.int
+            np.int32
         )
         boundaries[boundaries != 0] = 9
         viewer.add_labels(boundaries, name="superpixels", opacity=1)
@@ -258,7 +258,7 @@ def create_viewer(
 
     @viewer.bind_key("r")
     def refresh(viewer):
-        initial = np.zeros(image.shape[:2], dtype=np.int)
+        initial = np.zeros(image.shape[:2], dtype=np.int32)
         viewer.layers["markers"].data = initial
         # viewer.layers['instability map'].data = initial
 
@@ -295,7 +295,7 @@ def create_viewer(
                     super_pixels, _ = get_superpixels_of_image(image, n_superpixels)
                     boundaries = find_boundaries(
                         super_pixels, connectivity=1, mode="inner"
-                    ).astype(np.int)
+                    ).astype(np.int32)
                     boundaries[boundaries != 0] = 9
                     print(boundaries.max())
                     viewer.layers["superpixels"].data = boundaries

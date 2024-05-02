@@ -235,7 +235,7 @@ class LCNCreator:
 
         if superpixels_markers is not None:
             self._superpixel_markers = np.expand_dims(superpixels_markers, 0).astype(
-                np.int
+                np.int32
             )
             self._has_superpixel_markers = True
 
@@ -1231,7 +1231,7 @@ def _pooling_markers(markers, kernel_size, stride=1, padding=0):
             (marker_shape[1] + 2 * padding[1] - kernel_size[1]) / stride + 1
         )
 
-        new_marker = np.zeros(marker_shape, dtype=np.int)
+        new_marker = np.zeros(marker_shape, dtype=np.int32)
         x_limit = marker.shape[0] + 2 * padding[0] - kernel_size[0]
         y_limit = marker.shape[1] + 2 * padding[1] - kernel_size[1]
         for x, y in zip(indices_x, indices_y):
